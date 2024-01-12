@@ -48,7 +48,31 @@ class ThemeConst {
         actionsIconTheme: IconThemeData(
           color: text
         ),
+        titleTextStyle: GoogleFonts.roboto(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.black
+        ),
         titleSpacing: 16
+      ),
+
+      tabBarTheme: TabBarTheme(
+        indicator: BoxDecoration(
+          color: const Color(0xFF2550E7),
+          borderRadius: BorderRadius.circular(8)
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        labelColor: Colors.white,
+        labelPadding: EdgeInsets.zero,
+        unselectedLabelColor: const Color(0xFFB0B0B0),
+        labelStyle: GoogleFonts.roboto(
+          fontSize: 16,
+          fontWeight: FontWeight.w400
+        ),
+        unselectedLabelStyle: GoogleFonts.roboto(
+          fontSize: 16,
+          fontWeight: FontWeight.w400
+        )
       ),
 
       colorScheme: const ColorScheme.light(
@@ -66,12 +90,17 @@ class ThemeConst {
       ),
 
       chipTheme: ChipThemeData(
+        backgroundColor: const Color(0x241677FF),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(16),
         ),
-        labelPadding: const EdgeInsets.symmetric(horizontal: 12),
+        side: const BorderSide(
+          color: Color(0x291677FF)
+        ),
+        labelPadding: const EdgeInsets.symmetric(horizontal: 8),
         labelStyle: GoogleFonts.roboto(
           fontSize: 14,
+          color: ColorsConst.primary,
           fontWeight: FontWeight.w500
         )
       ),
@@ -86,8 +115,29 @@ class ThemeConst {
           foregroundColor: const MaterialStatePropertyAll(Color(0xFF2550E7)),
           textStyle: MaterialStatePropertyAll(
             GoogleFonts.roboto(
-              fontSize: 14,
+              fontSize: 18,
               fontWeight: FontWeight.w600
+            )
+          )
+        )
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          elevation: const MaterialStatePropertyAll(8),
+          side: const MaterialStatePropertyAll(BorderSide(
+            color: ColorsConst.primary,
+          )),
+          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4)
+          )),
+          minimumSize: const MaterialStatePropertyAll(
+            Size(double.infinity, 50)
+          ),
+          textStyle: MaterialStatePropertyAll(
+            GoogleFonts.roboto(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
             )
           )
         )

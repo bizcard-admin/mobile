@@ -15,6 +15,7 @@ class ApiClient {
   ApiClient(this.path, {this.loader=true, this.errToast=true,this.additionalHeaders}){
     dio = Dio();
     dio.options.baseUrl = UrlsConst.apiHost;
+    dio.options.contentType = 'application/json'; 
     dio.interceptors.add(ApiInterceptors(
       dio: dio, 
       additionalHeaders: additionalHeaders,
@@ -28,7 +29,8 @@ class ApiClient {
   }
 
   Future<dynamic> post([dynamic data = const {}, Map<String, dynamic>? query]) async {
-    return _process(await dio.post<Map>(path, data: data));
+    var result = await dio.post<Map>(path, data: data);
+    return _process(result);
   }
 
   Future<dynamic> put([dynamic data = const {}, Map<String, dynamic>? query]) async {
@@ -59,6 +61,12 @@ class ApiInterceptors extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async{
+    print(options.baseUrl);
+    print(options.path);
+    print(options.data);
+    print(options.headers);
+    print(options.method);
+
     if (loader) showLoader();
 
     // if(FirebaseAuth.instance.currentUser==null){
