@@ -27,6 +27,7 @@ class _LinkStoreViewState extends State<LinkStoreView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leadingWidth: 30,
         title: const Text("Link Store"),
         actions: [
           TextButton(onPressed: (){}, child: const Text("Save")),
@@ -42,10 +43,7 @@ class _LinkStoreViewState extends State<LinkStoreView> {
             controller: TextEditingController()
           ),
           const Gap(size: 16),
-          Text('Recommended', style: GoogleFonts.roboto(
-            color: const Color(0xFF797272),
-            fontSize: 15,
-          )),
+          Text('Recommended', style: Theme.of(context).textTheme.labelSmall),
           const Gap(size: 16),
           LinkItemAdd(onAdd: (v)=>_viewModel.addLink(context))
         ],

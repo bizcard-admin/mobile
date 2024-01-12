@@ -1,4 +1,5 @@
 import 'package:antdesign_icons/antdesign_icons.dart';
+import 'package:bizcard_app/extensions/text_ext.dart';
 import 'package:bizcard_app/pages/widgets/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,16 +21,8 @@ class _PhotoViewState extends State<PhotoView> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         children: [
           Text(
-            'Set your photo', style: GoogleFonts.roboto(
-              fontWeight: FontWeight.w700,
-              fontSize: 28
-            )),
-          Text(
-            'Make your profile more engaging', style: GoogleFonts.roboto(
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: const Color(0xFFB0B0B0)
-            )),
+            'Set your photo', style: Theme.of(context).textTheme.titleMedium),
+          'Make your profile more engaging'.btext(context),
 
           const Gap(size: 80),
           
