@@ -6,6 +6,7 @@ import 'package:bizcard_app/pages/authentication/signup/cubit/page_cubit.dart';
 import 'package:bizcard_app/pages/authentication/photo/photo_view.dart';
 import 'package:bizcard_app/pages/authentication/signup/signup_view.dart';
 import 'package:bizcard_app/pages/authentication/welcome/welcome_view.dart';
+import 'package:bizcard_app/pages/cards/bloc/card_bloc.dart';
 import 'package:bizcard_app/pages/cards/builder/card_builder_view.dart';
 import 'package:bizcard_app/pages/cards/links/link_store_view.dart';
 import 'package:bizcard_app/pages/dashboard/cubit/bottomnav_cubit.dart';
@@ -42,7 +43,6 @@ class Routes {
   //cards
   static const String cardBuilder = "/card-builder";
   static const String linkStore = "/link-store";
-
 }
 
 class RouteGenerator {
@@ -103,10 +103,10 @@ class RouteGenerator {
 
       case Routes.cardBuilder:
         return getTransistionPage(BlocProvider(
-          create: (context) => AuthBloc(),
-          child: const CardBuilderView(),
+          create: (context) => CardBloc(),
+          child: CardBuilderView(cardId: settings.arguments as String),
         ));
-      
+
       case Routes.linkStore:
         return getTransistionPage(BlocProvider(
           create: (context) => AuthBloc(),
@@ -114,8 +114,15 @@ class RouteGenerator {
         ));
 
       case Routes.home:
-        return getTransistionPage(BlocProvider(
-          create: (context) => HomePageCubit(),
+        return getTransistionPage(MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => HomePageCubit(),
+            ),
+            BlocProvider(
+              create: (context) => CardBloc(),
+            ),
+          ],
           child: const DashboardView(),
         ));
 

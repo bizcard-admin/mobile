@@ -1,8 +1,15 @@
 import 'package:bizcard_app/base/base_viewmodel.dart';
+import 'package:bizcard_app/extensions/string_ext.dart';
+import 'package:bizcard_app/pages/cards/bloc/card_bloc.dart';
 import 'package:bizcard_app/pages/cards/builder/bottomsheets/edit_link.dart';
+import 'package:bizcard_app/models/card.dart' as bizcard;
+import 'package:bizcard_app/utils/global.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardBuilderViewModel extends BaseViewModel {
+
+  late bizcard.Card card;
 
   //about 
   late TextEditingController fNameController;
@@ -38,7 +45,44 @@ class CardBuilderViewModel extends BaseViewModel {
     });
   }
 
-  CardBuilderViewModel(){
+  onSave(BuildContext context){
+
+    FocusScope.of(context).unfocus();
+
+    var cardData = {
+      'cardName': 'test card',
+      'name': {
+        'firstName': fNameController.trim(),
+        'lastName': lNameController.trim(),
+        'middleName': mNameController.trim(),
+        'prefix': prefixController.trim()
+      },
+      'bio': bioController.trim(),
+      'phoneNumber': phoneController.trim(),
+      'email': emailController.trim(),
+      'address': {
+        'addressLine1': addressController.trim(),
+        'city': cityController.trim(),
+        'state': stateController.trim(),
+        'country': countryController.trim(),
+        'pincode': pincodeController.trim()
+      },
+      'company': {
+        'title': titleController.trim(),
+        'department': departmentController.trim(),
+        'companyName': companyNameController.trim(),
+        'companyWebsite': companyWebsiteController.trim(),
+        'companyDescription': aboutController.trim(),
+      },
+      'fields': []
+    };
+
+    context.read<CardBloc>().add(SaveCardEvent(card.id, cardData));
+  }
+
+  CardBuilderViewModel(String cardId){
+    card = Global.cards.value.firstWhere((element) => element.id==cardId);
+
     fNameController = TextEditingController();
     lNameController = TextEditingController();
     mNameController = TextEditingController();
