@@ -1,9 +1,11 @@
 import 'package:antdesign_icons/antdesign_icons.dart';
 import 'package:bizcard_app/pages/widgets/gap.dart';
+import 'package:bizcard_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class LinksEmpty extends StatelessWidget {
-  const LinksEmpty({super.key});
+  final String cardId;
+  const LinksEmpty({super.key, required this.cardId});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,10 @@ class LinksEmpty extends StatelessWidget {
             maxWidth: 180
           ),
           child: OutlinedButton(
-            onPressed: (){}, 
+            onPressed: ()async{
+              Navigator.pushNamed(context, Routes.linkStore,  arguments: cardId).then(
+                (value) => print(value));
+            }, 
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

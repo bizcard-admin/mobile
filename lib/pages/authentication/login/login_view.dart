@@ -32,7 +32,9 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-
+        if(state is Success){
+          Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
+        }
       },
       child: Scaffold(
         appBar: AppBar(),
@@ -49,7 +51,7 @@ class _LoginViewState extends State<LoginView> {
                 prefixIcon: AntIcons.mailOutlined,
                 isRequired: true,
                 validationType: 'email'
-              ),
+              ),      
               const Gap(size: 20),
               PasswordField(
                 label: 'Password',

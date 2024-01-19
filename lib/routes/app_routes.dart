@@ -20,6 +20,8 @@ import 'package:page_transition/page_transition.dart';
 import '../pages/authentication/bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../pages/common/image/image_bloc.dart';
+
 class Routes {
   Routes._();
 
@@ -102,15 +104,22 @@ class RouteGenerator {
         ));
 
       case Routes.cardBuilder:
-        return getTransistionPage(BlocProvider(
-          create: (context) => CardBloc(),
+        return getTransistionPage(MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => CardBloc(),
+            ),
+            BlocProvider(
+              create: (context) => ImageBloc(),
+            ),
+          ],
           child: CardBuilderView(cardId: settings.arguments as String),
         ));
 
       case Routes.linkStore:
         return getTransistionPage(BlocProvider(
-          create: (context) => AuthBloc(),
-          child: const LinkStoreView(),
+          create: (context) => CardBloc(),
+          child: LinkStoreView(cardId: settings.arguments as String,),
         ));
 
       case Routes.home:

@@ -1,3 +1,6 @@
+import 'package:bizcard_app/models/address.dart';
+import 'package:bizcard_app/models/company.dart';
+import 'package:bizcard_app/models/field_value.dart';
 import 'package:bizcard_app/models/name.dart';
 import 'package:equatable/equatable.dart';
 
@@ -8,8 +11,8 @@ class Card extends Equatable {
   final String? bio;
   final String? phoneNumber;
   final String? email;
-  final Map? address;
-  final Map? company;
+  final Address? address;
+  final Company? company;
   final String? picture;
   final String? logo;
   final String? banner;
@@ -17,7 +20,7 @@ class Card extends Equatable {
   final String theme;
   final String status;
   final List badges;
-  final List fields;
+  final List<FieldValue> fields;
   final Map? qr;
   final String? cardLink;
   final String? linkPreviewImage;
@@ -58,6 +61,37 @@ class Card extends Equatable {
     this.deleted,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'cardName': cardName,
+      'name': name?.toJson(),
+      'bio': bio,
+      'phoneNumber': phoneNumber,
+      'email': email,
+      'address': address?.toJson(),
+      'company': company?.toJson(),
+      'picture': picture,
+      'logo': logo,
+      'banner': banner,
+      'design': design,
+      'theme': theme,
+      'status': status,
+      'badges': List<dynamic>.from(badges),
+      'fields': List<dynamic>.from(fields.map((e) => e.toJson())),
+      'qr': qr,
+      'cardLink': cardLink,
+      'linkPreviewImage': linkPreviewImage,
+      'qrVisible': qrVisible,
+      'qrWithLogo': qrWithLogo,
+      'isPublic': isPublic,
+      'createdBy': createdBy,
+      'created': created.toIso8601String(),
+      'updated': updated.toIso8601String(),
+    };
+  }
+
+
   factory Card.fromJson(Map<String, dynamic> json) {
     return Card(
       id: json['_id'] as String,
@@ -66,8 +100,8 @@ class Card extends Equatable {
       bio: json['bio'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
       email: json['email'] as String?,
-      address: json['address'] as Map?,
-      company: json['company'] as Map?,
+      address: json['address']!=null ? Address.fromJson(json['address']) : null,
+      company: json['company']!=null ? Company.fromJson(json['company']) : null,
       picture: json['picture'] as String?,
       logo: json['logo'] as String?,
       banner: json['banner'] as String?,
@@ -75,7 +109,7 @@ class Card extends Equatable {
       theme: json['theme'] as String,
       status: json['status'] as String,
       badges: List.from(json['badges'] as List),
-      fields: List.from(json['fields'] as List),
+      fields: json['fields']!=null ? (json['fields'] as List).map((e) => FieldValue.fromJson(e)).toList(): [],
       qr: json['qr'] as Map?,
       cardLink: json['cardLink'] as String?,
       linkPreviewImage: json['linkPreviewImage'] as String?,

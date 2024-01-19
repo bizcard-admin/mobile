@@ -32,18 +32,7 @@ class CardItem extends StatelessWidget {
               children: [
                 FractionallySizedBox(
                   heightFactor: 0.75,
-                  child: card.banner==null
-                  ? const BannerPH()
-                  : Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(card.banner!)),
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(6)
-                      )
-                    ),
-                  ),
+                  child: BannerPH(image: card.banner)
                 ),
             
                 Align(
@@ -72,7 +61,7 @@ class CardItem extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: '${card.name?.firstName} ${card.name?.lastName}'.titletext(context),
-                    subtitle: '${card.bio}'.bltext(context),
+                    subtitle: '${card.email}'.bltext(context),
                     trailing: InkWell(
                       onTap: onOptionClick,
                       child: Container(

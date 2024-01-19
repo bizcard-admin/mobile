@@ -1,3 +1,4 @@
+import 'package:bizcard_app/models/field_value.dart';
 import 'package:bizcard_app/network/service/card_service.dart';
 import 'package:bizcard_app/utils/global.dart';
 import 'package:bizcard_app/models/card.dart' as bizcard;
@@ -12,6 +13,21 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     on<SaveCardEvent>(_onSaveCard);
     on<CreateCardEvent>(_onCreateCard);
     on<DeleteCardEvent>(_onDeleteCard);
+    on<AddLinkEvent>(_onAddLink);
+  }
+
+  _onAddLink(AddLinkEvent event, Emitter emit)async{
+    emit(Loading());
+    try{
+      var found = Global.cards.value.firstWhere((element) => element.id==event.cardId);
+      var value = FieldValue(id: '${found.fields.length}', title: event.title, link: event.link, icon: event.icon, highlight: false);
+      var data = {'fields': [...found.fields.map((e) => e.toJson()).toList(), value.toJson()]};
+      var card = await CardService().saveCard(cardId: event.cardId, data: data);
+      Global.updateCard(bizcard.Card.fromJson(card));
+      emit(LinkAdded(field: value));
+    }catch(error){
+      emit(Error());
+    }
   }
 
   _onSaveCard(SaveCardEvent event, Emitter emit)async{
@@ -21,7 +37,6 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       Global.updateCard(bizcard.Card.fromJson(card));
       emit(Success());
     }catch(error){
-      print(error);
       emit(Error());
     }
   }
@@ -30,6 +45,7 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     emit(Loading());
     try{
       var card = await CardService().createCard(cardName: event.cardName, isPublic: event.isPublic);
+      Global.addCard(bizcard.Card.fromJson(card));
       emit(Created(cardId: card['_id']));
     }catch(error){
       emit(Error());
