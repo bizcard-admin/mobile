@@ -1,3 +1,4 @@
+import 'package:bizcard_app/models/contact_info.dart';
 import 'package:bizcard_app/pages/authentication/callback/callback_view.dart';
 import 'package:bizcard_app/pages/authentication/login/login_view.dart';
 import 'package:bizcard_app/pages/authentication/password/forgot/forgot_password_view.dart';
@@ -9,8 +10,11 @@ import 'package:bizcard_app/pages/authentication/welcome/welcome_view.dart';
 import 'package:bizcard_app/pages/cards/bloc/card_bloc.dart';
 import 'package:bizcard_app/pages/cards/builder/card_builder_view.dart';
 import 'package:bizcard_app/pages/cards/links/link_store_view.dart';
+import 'package:bizcard_app/pages/contacts/create/create_contact_view.dart';
+import 'package:bizcard_app/pages/contacts/extracter/extracter_view.dart';
 import 'package:bizcard_app/pages/dashboard/cubit/bottomnav_cubit.dart';
 import 'package:bizcard_app/pages/dashboard/dashboard_view.dart';
+import 'package:bizcard_app/pages/preview/bizcard_preview.dart';
 import 'package:bizcard_app/pages/scan/scan_view.dart';
 import 'package:bizcard_app/pages/settings/settings_view.dart';
 import 'package:bizcard_app/pages/splash/splash_view.dart';
@@ -21,6 +25,8 @@ import '../pages/authentication/bloc/auth_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../pages/common/image/image_bloc.dart';
+import '../pages/common/open_ai/ai_bloc.dart';
+import '../pages/contacts/bloc/contacts_bloc.dart';
 
 class Routes {
   Routes._();
@@ -42,9 +48,14 @@ class Routes {
   static const String settings = "/settings";
   static const String scan = "/scan";
 
+  //contacts
+  static const String extracter = "/extracter";
+  static const String createContact = "/create-contact";
+
   //cards
   static const String cardBuilder = "/card-builder";
   static const String linkStore = "/link-store";
+  static const String preview = "/preview";
 }
 
 class RouteGenerator {
@@ -119,7 +130,9 @@ class RouteGenerator {
       case Routes.linkStore:
         return getTransistionPage(BlocProvider(
           create: (context) => CardBloc(),
-          child: LinkStoreView(cardId: settings.arguments as String,),
+          child: LinkStoreView(
+            cardId: settings.arguments as String,
+          ),
         ));
 
       case Routes.home:
@@ -140,6 +153,38 @@ class RouteGenerator {
 
       case Routes.scan:
         return getTransistionPage(const ScanView());
+
+      case Routes.createContact:
+        return getTransistionPage(MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => ImageBloc(),
+            ),
+            BlocProvider(
+              create: (context) => ContactsBloc(),
+            ),
+          ],
+          child: CreateContactView(info: settings.arguments as ContactInfo?),
+        ));
+
+      case Routes.extracter:
+        return getTransistionPage(MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => ContactsBloc(),
+            ),
+            BlocProvider(
+              create: (context) => AiBloc()
+                ..add(
+                    ExtractContactEvent(content: settings.arguments as String)),
+            ),
+          ],
+          child: ExtracterView(text: settings.arguments as String),
+        ));
+
+      case Routes.preview:
+        return getTransistionPage(
+            BizcardPreview(cardId: settings.arguments as String));
 
       default:
         return unDefinedRoute();
